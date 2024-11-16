@@ -16,12 +16,9 @@ const handicapPercentage = 0.85;
 const maxHandicap = 90;
 
 function calculateAverage(player) {
-  if (player.scores.length === 0) {
-    player.average = player.bookAverage;
-  } else {
-    const totalScore = player.scores.reduce((sum, score) => sum + score, 0);
-    player.average = Math.floor(totalScore / player.scores.length);
-  }
+  let totalScore = player.bookAverage; // Start with the book average
+  player.scores.forEach(score => totalScore += score);
+  player.average = Math.floor(totalScore / (player.scores.length + 1));
 }
 
 function calculateHandicap(player) {
