@@ -26,6 +26,20 @@ function calculateHandicap(player) {
   player.handicap = Math.min(calculatedHandicap, maxHandicap);
 }
 
+function saveToLocalStorage() {
+  localStorage.setItem('players', JSON.stringify(players));
+}
+
+function loadFromLocalStorage() {
+  const storedPlayers = localStorage.getItem('players');
+  if (storedPlayers) {
+    players = JSON.parse(storedPlayers);
+    players.forEach(player => {
+      if (!player.points) player.points = 0; // Ensure points field exists
+    });
+  }
+}
+
 function updateScores() {
   // Clear previous points
   players.forEach(player => player.points = 0);
@@ -90,6 +104,7 @@ function updateScores() {
     });
   }
 
+  saveToLocalStorage(); // Save updated data to local storage
   displayTeams();
 }
 
@@ -147,11 +162,15 @@ function addPlayer() {
 
   if ((team === 1 && players.filter(player => player.team === 1).length < 5) || (team === 2 && players.filter(player => player.team === 2).length < 5)) {
     players.push({ name, team, bookAverage, scores: [], average: bookAverage, handicap: 0, points: 0 });
+    saveToLocalStorage(); // Save new player to local storage
     displayTeams();
   } else {
     alert(`Team ${team} is already full.`);
   }
 }
 
-window.onload = displayTeams;
+window.onload = () => {
+  loadFromLocalStorage(); // Load data from local storage when the page loads
+  displayTeams();
+};
 
