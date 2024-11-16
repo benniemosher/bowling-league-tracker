@@ -1,19 +1,6 @@
-let players = [
-  { name: "Savannah", team: 1, bookAverage: 126, scores: [], average: 126, handicap: 0, points: 0 },
-  { name: "Zaac", team: 1, bookAverage: 184, scores: [], average: 184, handicap: 0, points: 0 },
-  { name: "Lillie", team: 1, bookAverage: 75, scores: [], average: 75, handicap: 0, points: 0 },
-  { name: "Kaylee", team: 1, bookAverage: 52, scores: [], average: 52, handicap: 0, points: 0 },
-  { name: "Dylan", team: 1, bookAverage: 146, scores: [], average: 146, handicap: 0, points: 0 },
-  { name: "Chris", team: 2, bookAverage: 162, scores: [], average: 162, handicap: 0, points: 0 },
-  { name: "Lindsey", team: 2, bookAverage: 93, scores: [], average: 93, handicap: 0, points: 0 },
-  { name: "Chase", team: 2, bookAverage: 108, scores: [], average: 108, handicap: 0, points: 0 },
-  { name: "Anton", team: 2, bookAverage: 121, scores: [], average: 121, handicap: 0, points: 0 },
-  { name: "Dale", team: 2, bookAverage: 148, scores: [], average: 148, handicap: 0, points: 0 }
-];
+import { ref, set, get, child } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
 
-const handicapBase = 220;
-const handicapPercentage = 0.85;
-const maxHandicap = 90;
+let players = [];
 
 function calculateAverage(player) {
   let totalScore = player.bookAverage; // Start with the book average
@@ -26,18 +13,20 @@ function calculateHandicap(player) {
   player.handicap = Math.min(calculatedHandicap, maxHandicap);
 }
 
-function saveToLocalStorage() {
-  localStorage.setItem('players', JSON.stringify(players));
+function saveToFirebase() {
+  set(ref(window.database, 'players'), players);
 }
 
-function loadFromLocalStorage() {
-  const storedPlayers = localStorage.getItem('players');
-  if (storedPlayers) {
-    players = JSON.parse(storedPlayers);
-    players.forEach(player => {
-      if (!player.points) player.points = 0; // Ensure points field exists
-    });
-  }
+function loadFromFirebase() {
+  get(child(ref(window.database), 'players')).then(snapshot => {
+    if (snapshot.exists()) {
+      players = snapshot.val();
+      players.forEach(player => {
+        if (!player.points) player.points = 0; // Ensure points field exists
+      });
+    }
+    displayTeams();
+  });
 }
 
 function updateScores() {
@@ -104,7 +93,7 @@ function updateScores() {
     });
   }
 
-  saveToLocalStorage(); // Save updated data to local storage
+  saveToFirebase(); // Save updated data to Firebase
   displayTeams();
 }
 
@@ -162,7 +151,7 @@ function addPlayer() {
 
   if ((team === 1 && players.filter(player => player.team === 1).length < 5) || (team === 2 && players.filter(player => player.team === 2).length < 5)) {
     players.push({ name, team, bookAverage, scores: [], average: bookAverage, handicap: 0, points: 0 });
-    saveToLocalStorage(); // Save new player to local storage
+    saveToFirebase(); // Save new player to Firebase
     displayTeams();
   } else {
     alert(`Team ${team} is already full.`);
@@ -170,7 +159,6 @@ function addPlayer() {
 }
 
 window.onload = () => {
-  loadFromLocalStorage(); // Load data from local storage when the page loads
-  displayTeams();
+  loadFromFirebase(); // Load data from Firebase when the page loads
 };
 
