@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Center content horizontally */
     margin: 0;
     padding: 0;
 }
@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 80%;
 }
 
 h1 {
@@ -29,7 +29,7 @@ button {
 }
 
 table {
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
