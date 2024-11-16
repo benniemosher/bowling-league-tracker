@@ -1,14 +1,14 @@
 let players = [
-  { name: "Alice", team: 1, scores: [], average: 0, handicap: 0 },
-  { name: "Bob", team: 1, scores: [], average: 0, handicap: 0 },
-  { name: "Eve", team: 1, scores: [], average: 0, handicap: 0 },
-  { name: "Frank", team: 1, scores: [], average: 0, handicap: 0 },
-  { name: "Grace", team: 1, scores: [], average: 0, handicap: 0 },
-  { name: "Charlie", team: 2, scores: [], average: 0, handicap: 0 },
-  { name: "Daisy", team: 2, scores: [], average: 0, handicap: 0 },
-  { name: "Heidi", team: 2, scores: [], average: 0, handicap: 0 },
-  { name: "Ivan", team: 2, scores: [], average: 0, handicap: 0 },
-  { name: "Judy", team: 2, scores: [], average: 0, handicap: 0 }
+  { name: "Alice", team: 1, bookAverage: 150, scores: [], average: 150, handicap: 0 },
+  { name: "Bob", team: 1, bookAverage: 130, scores: [], average: 130, handicap: 0 },
+  { name: "Eve", team: 1, bookAverage: 145, scores: [], average: 145, handicap: 0 },
+  { name: "Frank", team: 1, bookAverage: 155, scores: [], average: 155, handicap: 0 },
+  { name: "Grace", team: 1, bookAverage: 140, scores: [], average: 140, handicap: 0 },
+  { name: "Charlie", team: 2, bookAverage: 140, scores: [], average: 140, handicap: 0 },
+  { name: "Daisy", team: 2, bookAverage: 120, scores: [], average: 120, handicap: 0 },
+  { name: "Heidi", team: 2, bookAverage: 135, scores: [], average: 135, handicap: 0 },
+  { name: "Ivan", team: 2, bookAverage: 125, scores: [], average: 125, handicap: 0 },
+  { name: "Judy", team: 2, bookAverage: 150, scores: [], average: 150, handicap: 0 }
 ];
 
 const handicapBase = 220;
@@ -16,8 +16,12 @@ const handicapPercentage = 0.85;
 const maxHandicap = 90;
 
 function calculateAverage(player) {
-  const totalScore = player.scores.reduce((sum, score) => sum + score, 0);
-  player.average = totalScore / player.scores.length;
+  if (player.scores.length === 0) {
+    player.average = player.bookAverage;
+  } else {
+    const totalScore = player.scores.reduce((sum, score) => sum + score, 0);
+    player.average = totalScore / player.scores.length;
+  }
 }
 
 function calculateHandicap(player) {
@@ -25,24 +29,31 @@ function calculateHandicap(player) {
   player.handicap = Math.min(calculatedHandicap, maxHandicap);
 }
 
-function displayTeams() {
-  const team1 = document.getElementById('team1');
-  const team2 = document.getElementById('team2');
+function createTable(team) {
+  const table = document.createElement('table');
+  const header = table.insertRow();
+  header.innerHTML = `<th>Player</th>${Array.from({ length: 13 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
 
-  team1.innerHTML = '';
-  team2.innerHTML = '';
-
-  players.forEach(player => {
+  players.filter(player => player.team === team).forEach(player => {
     calculateAverage(player);
     calculateHandicap(player);
-    const li = document.createElement('li');
-    li.textContent = `${player.name} - Average: ${player.average.toFixed(2)}, Handicap: ${player.handicap}, Scores: ${player.scores.join(', ')}`;
-    if (player.team === 1) {
-      team1.appendChild(li);
-    } else {
-      team2.appendChild(li);
-    }
+
+    const row = table.insertRow();
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 13 }, (_, i) => `<td>${player.scores[i] || ''}</td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
   });
+
+  return table;
+}
+
+function displayTeams() {
+  const team1Container = document.getElementById('team1');
+  const team2Container = document.getElementById('team2');
+
+  team1Container.innerHTML = '';
+  team2Container.innerHTML = '';
+
+  team1Container.appendChild(createTable(1));
+  team2Container.appendChild(createTable(2));
 
   // Check if Add Player button should be displayed
   const addButton = document.querySelector('button#addPlayer');
@@ -55,11 +66,11 @@ function displayTeams() {
 
 function addPlayer() {
   const name = prompt('Enter player name:');
-  const average = parseInt(prompt('Enter player average score:'), 10);
+  const bookAverage = parseInt(prompt('Enter player book average score:'), 10);
   const team = parseInt(prompt('Enter team number (1 or 2):'), 10);
 
   if ((team === 1 && players.filter(player => player.team === 1).length < 5) || (team === 2 && players.filter(player => player.team === 2).length < 5)) {
-    players.push({ name, team, scores: [], average, handicap: 0 });
+    players.push({ name, team, bookAverage, scores: [], average: bookAverage, handicap: 0 });
     displayTeams();
   } else {
     alert(`Team ${team} is already full.`);
@@ -82,5 +93,4 @@ function addScore() {
 }
 
 window.onload = displayTeams;
-
 
