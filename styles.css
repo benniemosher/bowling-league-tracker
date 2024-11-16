@@ -45,7 +45,9 @@ th {
 }
 
 input[type="number"] {
-    width: 3ch;
+    width: 3rem;
     text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
