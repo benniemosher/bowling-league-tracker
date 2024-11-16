@@ -26,10 +26,6 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         window.database = getDatabase(app); // Attach database to window object for global access
-
-        // Make sure the addPlayer function is accessible globally
-        import { addPlayer } from './scripts.js'
-        window.addPlayer = addPlayer;
     </script>
 </head>
 <body>
