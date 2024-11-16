@@ -29,6 +29,20 @@ function calculateHandicap(player) {
   player.handicap = Math.min(calculatedHandicap, maxHandicap);
 }
 
+function updateScores() {
+  players.forEach(player => {
+    for (let i = 0; i < 10; i++) {
+      const scoreInput = document.getElementById(`${player.name}-score${i}`);
+      if (scoreInput && scoreInput.value) {
+        player.scores[i] = parseInt(scoreInput.value, 10) || 0;
+      }
+    }
+    calculateAverage(player);
+    calculateHandicap(player);
+  });
+  displayTeams();
+}
+
 function createTable(team) {
   const table = document.createElement('table');
   const header = table.insertRow();
@@ -39,7 +53,7 @@ function createTable(team) {
     calculateHandicap(player);
 
     const row = table.insertRow();
-    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td>${player.scores[i] || ''}</td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
   });
 
   return table;
@@ -74,21 +88,6 @@ function addPlayer() {
     displayTeams();
   } else {
     alert(`Team ${team} is already full.`);
-  }
-}
-
-function addScore() {
-  const playerName = prompt('Enter player name:');
-  const score = parseInt(prompt('Enter score for this week:'), 10);
-
-  const player = players.find(p => p.name === playerName);
-  if (player && player.scores.length < 10) {
-    player.scores.push(score);
-    displayTeams();
-  } else if (player) {
-    alert(`${playerName} has already entered scores for all 10 weeks.`);
-  } else {
-    alert(`${playerName} not found.`);
   }
 }
 
