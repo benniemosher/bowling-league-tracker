@@ -148,11 +148,11 @@ function displayTeams() {
   }
 }
 
-
-function addPlayer() {
+window.addPlayer = function addPlayer() {
   const name = prompt('Enter player name:');
   const bookAverage = parseInt(prompt('Enter player book average score:'), 10);
   const team = parseInt(prompt('Enter team number (1 or 2):'), 10);
+
   if ((team === 1 && players.filter(player => player.team === 1).length < 5) || (team === 2 && players.filter(player => player.team === 2).length < 5)) {
     players.push({ name, team, bookAverage, scores: [], average: bookAverage, handicap: 0, points: 0 });
     saveToFirebase(); // Save new player to Firebase
@@ -161,8 +161,6 @@ function addPlayer() {
     alert(`Team ${team} is already full.`);
   }
 }
-
-window.addPlayer
 
 window.onload = () => {
   loadFromFirebase(); // Load data from Firebase when the page loads
