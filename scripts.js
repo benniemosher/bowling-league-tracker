@@ -2,6 +2,10 @@ import { ref, set, get, child } from 'https://www.gstatic.com/firebasejs/9.6.10/
 
 let players = [];
 
+const handicapBase = 220;
+const handicapPercentage = 0.85;
+const maxHandicap = 90;
+
 function calculateAverage(player) {
   let totalScore = player.bookAverage; // Start with the book average
   player.scores.forEach(score => totalScore += score);
@@ -144,21 +148,4 @@ function displayTeams() {
   }
 }
 
-function addPlayer() {
-  const name = prompt('Enter player name:');
-  const bookAverage = parseInt(prompt('Enter player book average score:'), 10);
-  const team = parseInt(prompt('Enter team number (1 or 2):'), 10);
-
-  if ((team === 1 && players.filter(player => player.team === 1).length < 5) || (team === 2 && players.filter(player => player.team === 2).length < 5)) {
-    players.push({ name, team, bookAverage, scores: [], average: bookAverage, handicap: 0, points: 0 });
-    saveToFirebase(); // Save new player to Firebase
-    displayTeams();
-  } else {
-    alert(`Team ${team} is already full.`);
-  }
-}
-
-window.onload = () => {
-  loadFromFirebase(); // Load data from Firebase when the page loads
-};
-
+window.addPlayer
