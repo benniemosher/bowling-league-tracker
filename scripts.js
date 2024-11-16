@@ -32,14 +32,14 @@ function calculateHandicap(player) {
 function createTable(team) {
   const table = document.createElement('table');
   const header = table.insertRow();
-  header.innerHTML = `<th>Player</th>${Array.from({ length: 13 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
+  header.innerHTML = `<th>Player</th>${Array.from({ length: 10 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
 
   players.filter(player => player.team === team).forEach(player => {
     calculateAverage(player);
     calculateHandicap(player);
 
     const row = table.insertRow();
-    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 13 }, (_, i) => `<td>${player.scores[i] || ''}</td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td>${player.scores[i] || ''}</td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
   });
 
   return table;
@@ -82,11 +82,11 @@ function addScore() {
   const score = parseInt(prompt('Enter score for this week:'), 10);
 
   const player = players.find(p => p.name === playerName);
-  if (player && player.scores.length < 13) {
+  if (player && player.scores.length < 10) {
     player.scores.push(score);
     displayTeams();
   } else if (player) {
-    alert(`${playerName} has already entered scores for all 13 weeks.`);
+    alert(`${playerName} has already entered scores for all 10 weeks.`);
   } else {
     alert(`${playerName} not found.`);
   }
