@@ -26,10 +26,16 @@ function loadFromFirebase() {
     if (snapshot.exists()) {
       players = snapshot.val();
       players.forEach(player => {
+        if (!player.scores) player.scores = []; // Ensure scores array exists
         if (!player.points) player.points = 0; // Ensure points field exists
       });
+      console.log('Players loaded from Firebase:', players); // Log retrieved players
+    } else {
+      console.error('No data found in Firebase');
     }
     displayTeams();
+  }).catch(error => {
+    console.error('Error loading data from Firebase:', error);
   });
 }
 
