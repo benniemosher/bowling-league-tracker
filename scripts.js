@@ -47,14 +47,14 @@ function createTable(team) {
   const table = document.createElement('table');
   const header = table.insertRow();
   const teamName = team === 1 ? 'UC Prep' : 'Mountain Vista';
-  header.innerHTML = `<th>${teamName}</th>${Array.from({ length: 10 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
+  header.innerHTML = `<th>${teamName}</th>${Array.from({ length: 10 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Book Average</th><th>Average</th><th>Handicap</th>`;
 
   players.filter(player => player.team === team).forEach(player => {
     calculateAverage(player);
     calculateHandicap(player);
 
     const row = table.insertRow();
-    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.average}</td><td>${player.handicap}</td>`;
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.bookAverage}</td><td>${player.average}</td><td>${player.handicap}</td>`;
   });
 
   return table;
