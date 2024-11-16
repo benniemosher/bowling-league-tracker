@@ -44,7 +44,7 @@ th {
     background-color: #f2f2f2;
 }
 
-input[type="number"] {
+input[type="text"] {
     width: 3rem;
     text-align: center;
     padding-left: 0.5rem;

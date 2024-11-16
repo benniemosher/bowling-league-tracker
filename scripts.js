@@ -51,7 +51,7 @@ function createTable(team) {
     calculateHandicap(player);
 
     const row = table.insertRow();
-    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.bookAverage}</td><td>${player.average}</td><td>${player.handicap}</td>`;
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="text" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.bookAverage}</td><td>${player.average}</td><td>${player.handicap}</td>`;
   });
 
   return table;
