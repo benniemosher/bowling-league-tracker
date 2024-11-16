@@ -1,14 +1,14 @@
 let players = [
-  { name: "Alice", team: 1, bookAverage: 150, scores: [], average: 150, handicap: 0 },
-  { name: "Bob", team: 1, bookAverage: 130, scores: [], average: 130, handicap: 0 },
-  { name: "Eve", team: 1, bookAverage: 145, scores: [], average: 145, handicap: 0 },
-  { name: "Frank", team: 1, bookAverage: 155, scores: [], average: 155, handicap: 0 },
-  { name: "Grace", team: 1, bookAverage: 140, scores: [], average: 140, handicap: 0 },
-  { name: "Charlie", team: 2, bookAverage: 140, scores: [], average: 140, handicap: 0 },
-  { name: "Daisy", team: 2, bookAverage: 120, scores: [], average: 120, handicap: 0 },
-  { name: "Heidi", team: 2, bookAverage: 135, scores: [], average: 135, handicap: 0 },
-  { name: "Ivan", team: 2, bookAverage: 125, scores: [], average: 125, handicap: 0 },
-  { name: "Judy", team: 2, bookAverage: 150, scores: [], average: 150, handicap: 0 }
+  { name: "Savannah", team: 1, bookAverage: 126, scores: [], average: 126, handicap: 0 },
+  { name: "Zaac", team: 1, bookAverage: 184, scores: [], average: 184, handicap: 0 },
+  { name: "Lillie", team: 1, bookAverage: 75, scores: [], average: 75, handicap: 0 },
+  { name: "Kaylee", team: 1, bookAverage: 52, scores: [], average: 52, handicap: 0 },
+  { name: "Dylan", team: 1, bookAverage: 146, scores: [], average: 146, handicap: 0 },
+  { name: "Chris", team: 2, bookAverage: 162, scores: [], average: 162, handicap: 0 },
+  { name: "Lindsey", team: 2, bookAverage: 93, scores: [], average: 93, handicap: 0 },
+  { name: "Chase", team: 2, bookAverage: 108, scores: [], average: 108, handicap: 0 },
+  { name: "Anton", team: 2, bookAverage: 121, scores: [], average: 121, handicap: 0 },
+  { name: "Dale", team: 2, bookAverage: 148, scores: [], average: 148, handicap: 0 }
 ];
 
 const handicapBase = 220;
@@ -20,7 +20,7 @@ function calculateAverage(player) {
     player.average = player.bookAverage;
   } else {
     const totalScore = player.scores.reduce((sum, score) => sum + score, 0);
-    player.average = totalScore / player.scores.length;
+    player.average = Math.floor(totalScore / player.scores.length);
   }
 }
 
@@ -46,14 +46,15 @@ function updateScores() {
 function createTable(team) {
   const table = document.createElement('table');
   const header = table.insertRow();
-  header.innerHTML = `<th>Player</th>${Array.from({ length: 10 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
+  const teamName = team === 1 ? 'UC Prep' : 'Mountain Vista';
+  header.innerHTML = `<th>${teamName}</th>${Array.from({ length: 10 }, (_, i) => `<th>Week ${i + 1}</th>`).join('')}<th>Average</th><th>Handicap</th>`;
 
   players.filter(player => player.team === team).forEach(player => {
     calculateAverage(player);
     calculateHandicap(player);
 
     const row = table.insertRow();
-    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.average.toFixed(2)}</td><td>${player.handicap}</td>`;
+    row.innerHTML = `<td>${player.name}</td>${Array.from({ length: 10 }, (_, i) => `<td><input type="number" id="${player.name}-score${i}" value="${player.scores[i] || ''}" /></td>`).join('')}<td>${player.average}</td><td>${player.handicap}</td>`;
   });
 
   return table;
